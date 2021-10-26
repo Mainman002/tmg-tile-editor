@@ -54,8 +54,13 @@ export function Down(game) {
 
 export function Up(game) {
     window.addEventListener('mouseup', function(e) {
+        if ( game.mouse.pos.x < 764 ) {
+            game.return_map();
+        }
+
         game.mouse.click = false;
-        game.return_map();
     });
 }
+
+
 

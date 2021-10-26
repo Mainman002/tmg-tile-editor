@@ -135,7 +135,6 @@ export class Grid {
                 this.frame.x = this.main.mouse.activeFrame.x;
                 this.frame.y = this.main.mouse.activeFrame.y;
             }
-
             this.hovering = false;
         }
     }
@@ -152,9 +151,9 @@ export class Grid {
 
         if ( Collider.Line(this.main.mouse, this) ) {
             if ( this.main.mouse.activeTower > 0 ) {
-                Graphics.Bevel_Outline(ctx, this.pos, this.size, 3, 'Teal', 1);
+                Graphics.Bevel_Outline(ctx, this.pos, this.size, 2, 'Teal', 0.6);
             } else {
-                Graphics.Bevel_Outline(ctx, this.pos, this.size, 3, 'Red', 1);
+                Graphics.Bevel_Outline(ctx, this.pos, this.size, 2, 'Red', 0.5);
             }
         }
 
@@ -162,18 +161,21 @@ export class Grid {
         if ( this.hovering ) {
             if ( this.type > 0 ) {
                 if ( this.main.mouse.activeTower > 0 ) {
-                Graphics.Bevel_Outline(ctx, this.pos, this.size, 3, 'Gold', 1);
+                Graphics.Bevel_Outline(ctx, this.pos, this.size, 2, 'Gold', 0.5);
                 } else {
-                    Graphics.Bevel_Outline(ctx, this.pos, this.size, 3, 'Red', 1);
+                    Graphics.Bevel_Outline(ctx, this.pos, this.size, 2, 'Red', 0.5);
                 }
             } else {
                 if ( this.main.mouse.activeTower > 0 ) {
-                    Graphics.Bevel_Outline(ctx, this.pos, this.size, 3, 'Teal', 1);
+                    Graphics.Bevel_Outline(ctx, this.pos, this.size, 2, 'Teal', 0.5);
                 } else {
-                    Graphics.Bevel_Outline(ctx, this.pos, this.size, 3, 'Red', 1);
+                    Graphics.Bevel_Outline(ctx, this.pos, this.size, 2, 'Red', 0.5);
                 }
             }
         }
 
     }
 }
+
+
+

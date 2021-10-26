@@ -8,23 +8,15 @@ import * as Graphics from './modules/draw_manager.js';
 import * as Mouse from './modules/input_manager.js';
 
 // Tower Select Buttons
-import {
-    TowerButton, TowerDeleteButton, TowerButton_0_UP0,
-    TowerButton_1_UP1, TowerButton_1_UP2, TowerButton_1_UP3,
-    TowerButton_2_UP1, TowerButton_2_UP2, TowerButton_2_UP3,
-    TowerButton_3_UP1, TowerButton_3_UP2, TowerButton_3_UP3,
-    TowerButton_4_UP1, TowerButton_4_UP2, TowerButton_4_UP3,
-    TowerButton_5_UP1, TowerButton_5_UP2, TowerButton_5_UP3,
-    TowerButton_6_UP1, TowerButton_6_UP2, TowerButton_6_UP3,
-    } from '../src/modules/buttons.js';
+import * as Buttons from '../src/modules/buttons.js';
 
-const buttonTypes = [TowerDeleteButton, TowerButton_0_UP0,
-    TowerButton_1_UP1, TowerButton_1_UP2, TowerButton_1_UP3,
-    TowerButton_2_UP1, TowerButton_2_UP2, TowerButton_2_UP3,
-    TowerButton_3_UP1, TowerButton_3_UP2, TowerButton_3_UP3,
-    TowerButton_4_UP1, TowerButton_4_UP2, TowerButton_4_UP3,
-    TowerButton_5_UP1, TowerButton_5_UP2, TowerButton_5_UP3,
-    TowerButton_6_UP1, TowerButton_6_UP2, TowerButton_6_UP3,
+const buttonTypes = [Buttons.TowerDeleteButton, Buttons.TowerButton_0_UP0,
+    Buttons.TowerButton_1_UP1, Buttons.TowerButton_1_UP2, Buttons.TowerButton_1_UP3,
+    Buttons.TowerButton_2_UP1, Buttons.TowerButton_2_UP2, Buttons.TowerButton_2_UP3,
+    Buttons.TowerButton_3_UP1, Buttons.TowerButton_3_UP2, Buttons.TowerButton_3_UP3,
+    Buttons.TowerButton_4_UP1, Buttons.TowerButton_4_UP2, Buttons.TowerButton_4_UP3,
+    Buttons.TowerButton_5_UP1, Buttons.TowerButton_5_UP2, Buttons.TowerButton_5_UP3,
+    Buttons.TowerButton_6_UP1, Buttons.TowerButton_6_UP2, Buttons.TowerButton_6_UP3,
 ];
 
 
@@ -114,9 +106,11 @@ window.addEventListener('load', e => {
         }
 
         return_map(){
-            let text = main.tiles.join(",");
-            console.log("Map: ", text);
-            navigator.clipboard.writeText(text);
+            setTimeout(function() {
+                let text = main.tiles.join(",");
+                console.log("Map: ", text);
+                navigator.clipboard.writeText(text);
+            }, 100);
         }
 
         init(){
@@ -176,12 +170,12 @@ window.addEventListener('load', e => {
 
             // Shows mouse cursor
             if ( main.mouse.pos.x < 64 * 12 - main.mouse.size.w ) {
-                Graphics.Bevel_Outline(ctx, main.mouse.pos, main.mouse.size, 3, 'Green', 1);
+                Graphics.Bevel_Outline(ctx, main.mouse.pos, main.mouse.size, 2, 'Green', 1);
             }
 
 
             if ( this.mouse.click ) {
-                Graphics.Line_Box(ctx, this.mouse.start_pos, this.mouse.pos, this.mouse.size, 5, 'LightBlue');
+                Graphics.Line_Box(ctx, this.mouse.start_pos, this.mouse.pos, this.mouse.size, 5, 'LimeGreen');
 
                 // Graphics.Line(ctx, this.mouse.start_pos, this.mouse.pos, this.mouse.size, 3, 'Red');
 
@@ -189,6 +183,7 @@ window.addEventListener('load', e => {
 
         }
     } 
+
     const main = new Main();
     Screen.Init(main);
     main.init();
@@ -206,5 +201,13 @@ window.addEventListener('load', e => {
     } 
     process();
 });
+
+
+
+
+
+
+
+
 
 
