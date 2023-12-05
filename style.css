@@ -41,6 +41,7 @@ img{
 }
 
 #bg {
+    user-select: none;
     background-color: rgb(22, 26, 27);
 }
 
@@ -81,5 +82,5 @@ img{
     left: 0;
     min-width: 80px;
     min-height: 25px;
-    z-index: 2;
+    z-index: 4;
 }
