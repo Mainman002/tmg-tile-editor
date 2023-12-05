@@ -90,7 +90,7 @@ window.addEventListener('load', e => {
                 bg_02 : Image_Loader.load( 'src/images/backgrounds/level2.png' ),
 
                 // Entities
-                enemies : Image_Loader.load( 'src/images/enemies_01.png' ),
+                enemies : Image_Loader.load( 'src/images/Enemies_01.png' ),
                 towers : Image_Loader.load( 'src/images/buttons/towers.png' ), 
                 buttons : Image_Loader.load( 'src/images/buttons/buttons.png' )
             };
