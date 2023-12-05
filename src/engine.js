@@ -6,9 +6,12 @@ import * as Collider from './modules/collision_manager.js';
 import * as Graphics from './modules/draw_manager.js';
 
 import * as Mouse from './modules/input_manager.js';
+import * as Touch from './modules/touch.js';
 
 // Tower Select Buttons
-import * as Buttons from '../src/modules/buttons.js';
+import * as Buttons from './objects/buttons.js';
+
+import * as Image_Loader from './modules/image_loader.js';
 
 const buttonTypes = [Buttons.TowerDeleteButton, Buttons.TowerButton_0_UP0,
     Buttons.TowerButton_1_UP1, Buttons.TowerButton_1_UP2, Buttons.TowerButton_1_UP3,
@@ -20,18 +23,14 @@ const buttonTypes = [Buttons.TowerDeleteButton, Buttons.TowerButton_0_UP0,
 ];
 
 
-import { Grid } from './modules/grid.js';
+import { Grid } from './objects/grid.js';
 
 
 window.addEventListener('load', e => {
-    const canvas = document.getElementById("canvas");
-    const ctx = canvas.getContext("2d");
     const bgCtx = bg.getContext("2d");
+    const ctx = canvas.getContext("2d");
     const interactCtx = interact.getContext("2d");
     const weaponCtx = weapon.getContext("2d");
-
-    canvas.width = 1088;
-    canvas.height = 640;
 
     window.addEventListener('keydown', e => {
         !e.repeat
@@ -71,10 +70,30 @@ window.addEventListener('load', e => {
 
     class Main {
         constructor(){
-            this.ctx = ctx;
-            this.bgCtx = bgCtx;
-            this.interactCtx = interactCtx;
-            this.weaponCtx = weaponCtx;
+            this.debug = false;
+            this.resolution = {w: 1080, h: 800};
+
+            this.canvas_list = [
+                {cx: bgCtx, ca: bg}, 
+                {cx: ctx, ca: canvas}, 
+                {cx: interactCtx, ca: interact}, 
+                {cx: weaponCtx, ca: weapon}, 
+            ];
+
+            this.images = {
+                // Logos
+                gear : Image_Loader.load( 'src/images/gear.png' ),
+
+                // Backgrounds
+                bg_00 : Image_Loader.load( 'src/images/backgrounds/circuitBoard1.png' ),
+                bg_01 : Image_Loader.load( 'src/images/backgrounds/level1.png' ), 
+                bg_02 : Image_Loader.load( 'src/images/backgrounds/level2.png' ),
+
+                // Entities
+                enemies : Image_Loader.load( 'src/images/enemies_01.png' ),
+                towers : Image_Loader.load( 'src/images/buttons/towers.png' ), 
+                buttons : Image_Loader.load( 'src/images/buttons/buttons.png' )
+            };
 
             this.show_grid = false;
             this.grid = [];
@@ -98,6 +117,7 @@ window.addEventListener('load', e => {
                 size: {w:2, h:2},
                 activeTower: 0,
                 activeFrame: {x:0,y:0},
+                first_click: true,
                 click: false,
             }
 
@@ -117,7 +137,7 @@ window.addEventListener('load', e => {
             console.log("Game Started");
 
             if (this.tiles && this.tiles.length === 0){
-                for (let i = 0; i < 120; ++i){
+                for (let i = 0; i < 144; ++i){
                     this.tiles.push(0);
                     this.grid.push(new Grid(this, this.tiles[i], i, {x:(i % 12) * 64, y:Math.floor(i/12) * 64}, {w:64, h:64}));
                     this.grid[i].init();
@@ -162,7 +182,7 @@ window.addEventListener('load', e => {
         draw(ctx){
 
             ctx.globalAlpha = 0.2;
-            ctx.drawImage(bg_L_00, 0,0,canvas.width, canvas.height);
+            ctx.drawImage(this.images.bg_00, 0,0,canvas.width, canvas.height);
 
             ctx.globalAlpha = 1.0;
             this.grid.forEach(ob => ob.draw(ctx));
@@ -185,16 +205,18 @@ window.addEventListener('load', e => {
     } 
 
     const main = new Main();
-    Screen.Init(main);
+    Screen.init(main);
     main.init();
 
-    Mouse.Move(main);
-    Mouse.Up(main);
-    Mouse.Down(main);
+    Mouse.move(main, canvas);
+    Mouse.leave(main);
+    Mouse.down(main, canvas);
+    Mouse.up(main);
+    Touch.init(main);
 
 
     function process(dt){
-        ctx.clearRect(0,0,canvas.width,canvas.height);
+        for (let i = 0; i < main.canvas_list.length; ++i) main.canvas_list[i].cx.clearRect(0,0,main.canvas_list[i].ca.width, main.canvas_list[i].ca.height);
         main.update(dt);
         main.draw(ctx);
         requestAnimationFrame(process);

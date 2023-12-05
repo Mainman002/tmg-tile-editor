@@ -1,63 +1,95 @@
-// Draw Manager
-import * as Graphics from '../modules/draw_manager.js';
+export function init(main) {
+    if (main.debug) console.log("Screen Manager Loaded");
 
-export function Init( game ){ 
-    if ( game.debug ) console.log( "Screen Manager Loaded" );
+    // Check if fullscreen is supported
+    const fullscreenEnabled = document.fullscreenEnabled || document.mozFullScreenEnabled || document.documentElement.webkitRequestFullScreen;
 
-    canvas.width = 1088;
-    canvas.height = 640;
+    if (fullscreenEnabled) {
+        const element = document.documentElement; // You can replace this with the specific element you want to make fullscreen
 
-    bg.width = canvas.width;
-    bg.height = canvas.height;
+        // Function to enter fullscreen mode
+        function enterFullscreen() {
+            if (element.requestFullscreen) {
+                element.requestFullscreen();
+            } else if (element.mozRequestFullScreen) { // Firefox
+                element.mozRequestFullScreen();
+            } else if (element.webkitRequestFullScreen) { // Chrome and Safari
+                element.webkitRequestFullScreen();
+            }
+        }
 
-    weapon.width = canvas.width;
-    weapon.height = canvas.height;
+        // Function to exit fullscreen mode
+        function exitFullscreen() {
+            if (document.exitFullscreen) {
+                document.exitFullscreen();
+            } else if (document.mozCancelFullScreen) {
+                document.mozCancelFullScreen();
+            } else if (document.webkitExitFullscreen) {
+                document.webkitExitFullscreen();
+            }
+        }
 
-    interact.width = canvas.width;
-    interact.height = canvas.height;
+        // Toggle fullscreen mode
+        function toggleFullscreen() {
+            if (document.fullscreenElement || document.mozFullScreenElement || document.webkitFullscreenElement) {
+                exitFullscreen();
+            } else {
+                enterFullscreen();
+            }
+        }
 
-    Resize( game, game.ctx, canvas );
-    Resize( game, game.bgCtx, bg );
-    Resize( game, game.weaponCtx, weapon );
-    Resize( game, game.interactCtx, interact );
+        // You can trigger fullscreen based on user interaction, for example, a button click
+        const fullscreenButton = document.getElementById('fullscreenButton'); // Replace with your button's ID
 
-    window.addEventListener( 'resize', function( e ) { 
-        Resize( game, game.ctx, canvas );
-        Resize( game, game.bgCtx, bg );
-        Resize( game, game.weaponCtx, weapon );
-        Resize( game, game.interactCtx, interact );
-     } );
+        if (fullscreenButton) {
+            fullscreenButton.addEventListener('click', toggleFullscreen);
+        }
+    } else {
+        console.log("Fullscreen not supported on this device/browser.");
+    }
 
 
- }
+    for ( let i = 0; i < main.canvas_list.length; ++i ) {
+        main.canvas_list[i].ca.width = main.resolution.w;
+        main.canvas_list[i].ca.height = main.resolution.h;
+        resize(main,  main.canvas_list[i].cx, main.canvas_list[i].ca);
+    }
 
-export function Resize( game, _ctx, _canvas ){ 
-    const border = 50;
-    const aspect = { w : 6.5, h : 4 };
+    window.addEventListener('resize', function(e) {
+        for ( let i = 0; i < main.canvas_list.length; ++i ) {
+            main.canvas_list[i].ca.width = main.resolution.w;
+            main.canvas_list[i].ca.height = main.resolution.h;
+            resize(main, main.canvas_list[i].cx, main.canvas_list[i].ca);
+        }
+    });
+}
+  
+export function resize(main, _ctx, _canvas) {
+    const border = 3;
+    const aspect = {w:16, h:10};
     const img_smooth = true;
     let w = window.innerWidth;
-    let h = w * ( aspect.h / aspect.w );
+    let h = w * (aspect.h / aspect.w);
 
-    if ( h < window.innerHeight ){ 
+    if (h < window.innerHeight){
         // Check window width
         w = window.innerWidth;
-        h = w * ( aspect.h / aspect.w );
-     } else { 
+        h = w * (aspect.h / aspect.w);
+    } else {
         // Check window height
         h = window.innerHeight;
-        w = h * ( aspect.w / aspect.h );
-     }
+        w = h * (aspect.w / aspect.h);
+    }
 
-    if ( game.debug ) console.log( "Resized", "W", Math.floor( w ), "H", Math.floor( h ) );
+    if (main.debug) console.log("Resized", "W", Math.floor(w), "H", Math.floor(h));
 
-    _canvas.style.width = `${ w - border }px`;
-    _canvas.style.height = `${ h - border }px`;
-    
+    _canvas.style.width = `${w - border}px`;
+    _canvas.style.height = `${h - border}px`;
+
     // Graphic sharpness
     _ctx.mozImageSmoothingEnabled = img_smooth;
     _ctx.msImageSmoothingEnabled = img_smooth;
     _ctx.imageSmoothingEnabled = img_smooth;
-    
-    // game.bgCtx.clearRect(0,0, bg.width, bg.height);
-    Graphics.Image_Simple( game.bgCtx, bg_L_00, { x : 0, y : 0 }, { w : bg.width, h : bg.height }, 1 );
- }
+}
+  
+  

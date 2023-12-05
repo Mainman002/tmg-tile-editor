@@ -1,9 +1,27 @@
-html{
-    /* background-color: rgb(53, 93, 130); */
+body {
+    font-family: system-ui, -apple-system, -apple-system-font, 'Segoe UI', 'Roboto', sans-serif;
+    font-size: 12px;
+    text-transform: uppercase;
     background-color: rgb(15, 17, 22);
-    width:100%;
-    height:auto;
+    margin: 0;
+    padding: 0;
     overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+
+div {
+    border: solid 1px rgb(0, 191, 255);
+    width: 100%;
+    height: auto;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    text-align: center;
+    position: relative;
 }
 
 img{
@@ -11,48 +29,57 @@ img{
     image-rendering: -webkit-optimize-contrast;
 }
 
-#bg{
-    /* background-color: rgb(53, 93, 130); */
-    /* border: 1px solid rgb(0, 187, 255); */
-    width:1088px;
-    height:640px;
-    position: absolute;
-    top:50%;
-    left:50%;
-    transform: translate(-50%, -50%);
+#bg,
+#canvas,
+#weapon,
+#interact {
+    width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+    padding: 0;
 }
 
-#weapon{
-    /* background-color: rgb(53, 93, 130); */
-    /* border: 1px solid rgb(0, 187, 255); */
-    width:1088px;
-    height:640px;
-    position: absolute;
-    top:50%;
-    left:50%;
-    transform: translate(-50%, -50%);
+#bg {
+    background-color: rgb(22, 26, 27);
 }
 
-#canvas{
-    /* background-color: rgb(53, 93, 130); */
-    border: 1px solid rgb(0, 187, 255);
-    width:1088px;
-    height:640px;
+#canvas {
+    user-select: none;
     position: absolute;
-    top:50%;
-    left:50%;
-    transform: translate(-50%, -50%);
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1;
 }
 
-
-#interact{
-    /* background-color: rgb(53, 93, 130); */
-    /* border: 1px solid rgb(0, 187, 255); */
-    width:1088px;
-    height:640px;
+#weapon {
+    user-select: none;
     position: absolute;
-    top:50%;
-    left:50%;
-    transform: translate(-50%, -50%);
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 2;
 }
 
+#interact {
+    user-select: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 3;
+}
+
+#fullscreenButton {
+    user-select: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    min-width: 80px;
+    min-height: 25px;
+    z-index: 2;
+}

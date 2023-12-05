@@ -1,66 +1,76 @@
-export function Move(game) {
+// Detects Mouse Movement ( Requires that you wrap your project in a Main Class with this.mouse variable )
+export function move(main, _canvas) {
     window.addEventListener('mousemove', function(e) {
-        let bounds = canvas.getBoundingClientRect();
+        return_mouse_pos(main, e, _canvas);
 
-        // get the mouse coordinates, subtract the canvas top left and any scrolling
-        game.mouse.pos.x = e.pageX - bounds.left - scrollX;
-        game.mouse.pos.y = e.pageY - bounds.top - scrollY;
-
-        // first normalize the mouse coordinates from 0 to 1 (0,0) top left
-        // off canvas and (1,1) bottom right by dividing by the bounds width and height
-        game.mouse.pos.x /= bounds.width; 
-        game.mouse.pos.y /= bounds.height; 
-
-        // then scale to canvas coordinates by multiplying the normalized coords with the canvas resolution
-        game.mouse.pos.x *= canvas.width;
-        game.mouse.pos.y *= canvas.height;
-
-        // Center Mouse Bounds
-        game.mouse.pos.x = game.mouse.pos.x - game.mouse.size.w * 0.5;
-        game.mouse.pos.y = game.mouse.pos.y - game.mouse.size.h * 0.5;
-
-        if ( !game.mouse.click ) {
-            game.mouse.start_pos.x = game.mouse.pos.x;
-            game.mouse.start_pos.y = game.mouse.pos.y;
+        if ( main.mouse.click && !main.mouse.first_click ) {
+            main.mouse.start_pos.x = main.mouse.pos.x;
+            main.mouse.start_pos.y = main.mouse.pos.y;
+            main.mouse.first_click = true;
+        } else if (!main.mouse.click ) {
+            main.mouse.start_pos.x = main.mouse.pos.x;
+            main.mouse.start_pos.y = main.mouse.pos.y;
         }
-
-    });
-
-
-}
-
-
-export function Leave(game) {
-    window.addEventListener('mouseleave', function(e) {
-        game.mouse.pos.x = null;
-        game.mouse.pos.y = null;
-
-        game.mouse.start_pos.x = null;
-        game.mouse.start_pos.y = null;
-
-        game.mouse.click = false;
     });
 }
-
-
-export function Down(game) {
-    window.addEventListener( 'mousedown', function( e ) { 
-        game.mouse.start_pos.x = game.mouse.pos.x;
-        game.mouse.start_pos.y = game.mouse.pos.y;
-        game.mouse.click = true;
-    } );
+  
+  
+// Detects Mouse Exited Screen Area ( Requires that you wrap your project in a Main Class with this.mouse variable )
+export function leave(main) {
+  window.addEventListener('mouseleave', function(e) {
+      main.mouse.pos.x = null;
+      main.mouse.pos.y = null;
+      main.mouse.first_click = true;
+      main.mouse.click = false;
+  });
 }
+  
+  
+// Detects Mouse Pressed ( Requires that you wrap your project in a Main Class with this.mouse variable )
+export function down(main, _canvas) {
+  window.addEventListener( 'mousedown', function( e ) { 
+    return_mouse_pos(main, e, _canvas);
 
+    main.mouse.start_pos.x = main.mouse.pos.x;
+    main.mouse.start_pos.y = main.mouse.pos.y;
+    main.mouse.first_click = true;
 
-export function Up(game) {
-    window.addEventListener('mouseup', function(e) {
-        if ( game.mouse.pos.x < 764 ) {
-            game.return_map();
-        }
-
-        game.mouse.click = false;
-    });
+    main.mouse.click = true;
+  });
 }
+  
+  
+// Detects Mouse Released ( Requires that you wrap your project in a Main Class with this.mouse variable )
+export function up(main) {
+  window.addEventListener('mouseup', function(e) {
+    if ( main.mouse.pos.x < 764 ) {
+        main.return_map();
+    }
+    
+    main.mouse.click = false;
+  });
+}
+   
+  
+function return_mouse_pos(main, e, _canvas) {
+    let bounds = _canvas.getBoundingClientRect();
 
+    // get the mouse coordinates, subtract the canvas top left and any scrolling
+    main.mouse.pos.x = e.pageX - bounds.left - scrollX;
+    main.mouse.pos.y = e.pageY - bounds.top - scrollY;
 
+    // first normalize the mouse coordinates from 0 to 1 (0,0) top left
+    // off canvas and (1,1) bottom right by dividing by the bounds width and height
+    main.mouse.pos.x /= bounds.width; 
+    main.mouse.pos.y /= bounds.height; 
 
+    // then scale to canvas coordinates by multiplying the normalized coords with the canvas resolution
+    main.mouse.pos.x *= canvas.width;
+    main.mouse.pos.y *= canvas.height;
+
+    // Center Mouse Bounds
+    main.mouse.pos.x = main.mouse.pos.x - main.mouse.size.w * 0.5;
+    main.mouse.pos.y = main.mouse.pos.y - main.mouse.size.h * 0.5;
+
+    return {x:main.mouse.pos.x, y:main.mouse.pos.y};
+}
